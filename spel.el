@@ -64,8 +64,9 @@ that can be made from those words."
   (let ((splits nil))
     (mapc (lambda (word)
             (dotimes (i (length word))
-              (progn (push (substring word 0 i) splits)
-                     (push (substring word i (length word)) splits)))) words)
+              (push (cons (substring word 0 i)
+                          (substring word i (length word))) splits)))
+          words)
     splits))
 
 (spel-train "c:/Users/rml/Downloads/big.txt")
