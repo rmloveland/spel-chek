@@ -58,7 +58,7 @@ increment its existing count if it's been seen already."
          (replaces '())
          (inserts '()))))
 
-(defun spel-split-words (words)
+(defun spel-splits (words)
   "Given a list of words, return a list of the possible substrings
 that can be made from those words."
   (let ((splits nil))
@@ -68,5 +68,21 @@ that can be made from those words."
                           (substring word i (length word))) splits)))
           words)
     splits))
+
+(defun spel-deletes (words)
+  (mapcar (lambda (pair)
+            (concat (car pair)
+                    (substring (cdr pair) 1 (length (cdr pair)))))
+          (spel-splits words)))
+
+(defun spel-transposes (words)
+  (remove-if-not #'stringp
+                 (mapcar (lambda (pair)
+                           (when (> (length (cdr pair)) 1)
+                             (concat (car pair) 
+                                     (substring (cdr pair) 1 2)
+                                     (substring (cdr pair) 0 1)
+                                     (substring (cdr pair) 2 (length (cdr pair))))))
+                         (spel-splits words))))
 
 (spel-train "c:/Users/rml/Downloads/big.txt")
