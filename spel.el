@@ -50,32 +50,36 @@ increment its existing count if it's been seen already."
     (let ((words (split-string (buffer-string))))
       (mapc (lambda (word) (spel-add-word word)) words))))
 
-(defun spel-edits1 (word)
-  "Dummy function, for now."
-  (let* ((splits '())
-         (deletes '())
-         (transposes '())
-         (replaces '())
-         (inserts '()))))
+(defun spel-edits-1 (word)
+  ""
+  (append
+   (spel-splits word)
+   (spel-deletes word)
+   (spel-transposes word)
+   (spel-replaces word)
+   (spel-inserts word)))
 
-(defun spel-splits (words)
-  "Given a list of words, return a list of the possible substrings
-that can be made from those words."
+;; FIXME: This doesn't work yet.
+(defun spel-edits-2 (word) ; `Apply edits1 to the results of edits1'.
+  (mapcar #'spel-edits1
+          (spel-edits-1 word)))
+
+(defun spel-splits (word)
+  "Given a word, return a list of the possible substrings
+that can be made from that word."
   (let ((splits nil))
-    (mapc (lambda (word)
-            (dotimes (i (length word))
-              (push (cons (substring word 0 i)
-                          (substring word i (length word))) splits)))
-          words)
+    (dotimes (i (length word))
+      (push (cons (substring word 0 i)
+                  (substring word i (length word))) splits))
     splits))
 
-(defun spel-deletes (words)
+(defun spel-deletes (word)
   (mapcar (lambda (pair)
             (concat (car pair)
                     (substring (cdr pair) 1 (length (cdr pair)))))
-          (spel-splits words)))
+          (spel-splits word)))
 
-(defun spel-transposes (words)
+(defun spel-transposes (word)
   (remove-if-not #'stringp
                  (mapcar (lambda (pair)
                            (when (> (length (cdr pair)) 1)
@@ -83,6 +87,25 @@ that can be made from those words."
                                      (substring (cdr pair) 1 2)
                                      (substring (cdr pair) 0 1)
                                      (substring (cdr pair) 2 (length (cdr pair))))))
-                         (spel-splits words))))
+                         (spel-splits word))))
+
+(defun spel-replaces (word)
+  (mapcar (lambda (pair)
+            (when (cdr pair)
+              (mapcar (lambda (c)
+                        (concat (car pair)
+                                (char-to-string c)
+                                (substring (cdr pair) 1 (length (cdr pair)))))
+                      *spel-alphabet)))
+          (spel-splits word)))
+
+(defun spel-inserts (word)
+  (mapcar (lambda (pair)
+            (mapcar (lambda (c)
+                      (concat (car pair)
+                              (char-to-string c)
+                              (cdr pair)))
+                    *spel-alphabet))
+          (spel-splits word)))
 
 (spel-train "c:/Users/rml/Downloads/big.txt")
