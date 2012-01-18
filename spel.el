@@ -50,7 +50,10 @@ increment its existing count if it's been seen already."
     (let ((words (split-string (buffer-string))))
       (mapc (lambda (word) (spel-add-word word)) words))))
 
+(spel-train "c:/Users/rml/Downloads/big.txt")
+
 (defun spel-edits-1 (word)
+  ;; FIXME: Flatten the returned list, so that it can be consumed by =member=, et al.
   ""
   (append
    (spel-splits word)
@@ -61,8 +64,10 @@ increment its existing count if it's been seen already."
 
 ;; FIXME: This doesn't work yet.
 (defun spel-edits-2 (word) ; `Apply edits1 to the results of edits1'.
-  (mapcar #'spel-edits1
-          (spel-edits-1 word)))
+  (let ((first-pass (spel-edits-1 word)))
+    (mapcar (lambda (it)
+              (spel-edits-1 it))
+            first-pass))
 
 (defun spel-splits (word)
   "Given a word, return a list of the possible substrings
@@ -108,4 +113,11 @@ that can be made from that word."
                     *spel-alphabet))
           (spel-splits word)))
 
-(spel-train "c:/Users/rml/Downloads/big.txt")
+(defun spel-known (words)
+  (mapcar (lambda (w)
+            (when (gethash w *spel-words) w))
+          words))
+
+(defun spel-correct (word)
+  (let ((candidates (or (spel-known (spel-edits-1 word)) (spel-known word))))
+    candidates))
