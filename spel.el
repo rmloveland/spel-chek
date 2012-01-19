@@ -96,11 +96,11 @@ that can be made from that word."
 
 (defun spel-replaces (word)
   (mapcar (lambda (pair)
-            (when (cdr pair)
+            (when (cadr pair)
               (mapcar (lambda (c)
                         (concat (car pair)
                                 (char-to-string c)
-                                (substring (cdr pair) 1 (length (cdr pair)))))
+                                (substring (cadr pair) 1 (length (cadr pair)))))
                       *spel-alphabet)))
           (spel-splits word)))
 
@@ -109,7 +109,7 @@ that can be made from that word."
             (mapcar (lambda (c)
                       (concat (car pair)
                               (char-to-string c)
-                              (cdr pair)))
+                              (cadr pair)))
                     *spel-alphabet))
           (spel-splits word)))
 
