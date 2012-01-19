@@ -87,11 +87,11 @@ that can be made from that word."
 (defun spel-transposes (word)
   (remove-if-not #'stringp
                  (mapcar (lambda (pair)
-                           (when (> (length (cdr pair)) 1)
+                           (when (> (length (cadr pair)) 1)
                              (concat (car pair) 
-                                     (substring (cdr pair) 1 2)
-                                     (substring (cdr pair) 0 1)
-                                     (substring (cdr pair) 2 (length (cdr pair))))))
+                                     (substring (cadr pair) 1 2)
+                                     (substring (cadr pair) 0 1)
+                                     (substring (cadr pair) 2 (length (cadr pair))))))
                          (spel-splits word))))
 
 (defun spel-replaces (word)
