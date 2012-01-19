@@ -74,14 +74,14 @@ increment its existing count if it's been seen already."
 that can be made from that word."
   (let ((splits nil))
     (dotimes (i (length word))
-      (push (cons (substring word 0 i)
+      (push (list (substring word 0 i)
                   (substring word i (length word))) splits))
     splits))
 
 (defun spel-deletes (word)
   (mapcar (lambda (pair)
             (concat (car pair)
-                    (substring (cdr pair) 1 (length (cdr pair)))))
+                    (substring (cadr pair) 1 (length (cadr pair)))))
           (spel-splits word)))
 
 (defun spel-transposes (word)
