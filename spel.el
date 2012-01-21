@@ -122,5 +122,5 @@ that can be made from that word."
     known))
 
 (defun spel-correct (word)
-  (let ((candidates (or (spel-known (spel-edits-1 word)) (spel-known word))))
+  (let ((candidates (or (spel-known word) (spel-known (spel-edit-distance-1 word)))))
     candidates))
