@@ -55,22 +55,17 @@ increment its existing count if it's been seen already."
 (defun spel-edits-1 (word)
   ;; FIXME: Flatten the returned list, so that it can be consumed by =member=, et al.
   ""
-  (append
-   (spel-splits word)
-   (spel-deletes word)
-   (spel-transposes word)
-   (spel-replaces word)
-   (spel-inserts word)))
-
-;; FIXME: This doesn't work yet.
-(defun spel-edits-2 (word) ; `Apply edits1 to the results of edits1'.
-  (let ((first-pass (spel-edits-1 word)))
-    (mapcar (lambda (it)
-              (spel-edits-1 it))
-            first-pass))
+  (let ((result (append
+                 (spel-splits word)
+                 (spel-deletes word)
+                 (spel-transposes word)
+                 (spel-replaces word)
+                 (spel-inserts word))))
+    result))
 
 (defun spel-splits (word)
-  "Given a word, return a list of the possible substrings
+  "String -> List
+Given a word, return a list of the possible substrings
 that can be made from that word."
   (let ((splits nil))
     (dotimes (i (length word))
@@ -114,9 +109,11 @@ that can be made from that word."
           (spel-splits word)))
 
 (defun spel-known (words)
-  (mapcar (lambda (w)
-            (when (gethash w *spel-words) w))
-          words))
+  (let ((known nil))
+    (mapc (lambda (w)
+            (when (gethash w *spel-words) (push w known)))
+          words)
+    known))
 
 (defun spel-correct (word)
   (let ((candidates (or (spel-known (spel-edits-1 word)) (spel-known word))))
