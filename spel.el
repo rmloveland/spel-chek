@@ -121,7 +121,7 @@ that can be made from that word."
           words)
     known))
 
-(defun spel-correct (word &optional remove-short-words)
+(defun spel-correct (word &keyword remove-short-words)
   (let ((candidates
          (remove-duplicates
           (or (spel-known word)
