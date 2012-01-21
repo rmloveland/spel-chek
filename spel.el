@@ -57,15 +57,14 @@ increment its existing count if it's been seen already."
 
 (spel-train "c:/Users/rml/Downloads/big.txt")
 
-(defun spel-edits-1 (word)
-  ;; FIXME: Flatten the returned list, so that it can be consumed by =member=, et al.
-  ""
-  (let ((result (append
-                 (spel-splits word)
-                 (spel-deletes word)
-                 (spel-transposes word)
-                 (spel-replaces word)
-                 (spel-inserts word))))
+(defun spel-edit-distance-1 (word)
+  (let ((result (spel-flatten-list
+                 (append
+                  (spel-splits word)
+                  (spel-deletes word)
+                  (spel-transposes word)
+                  (spel-replaces word)
+                  (spel-inserts word)))))
     result))
 
 (defun spel-splits (word)
