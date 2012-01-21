@@ -34,6 +34,11 @@
 
 (defvar *spel-alphabet "abcdefghijklmnopqrstuvwxyz")
 
+(defun spel-flatten-list (lst)
+  (cond ((listp lst)
+	 (apply #'append (mapcar 'spel-flatten-list lst)))
+	(t (list lst))))
+
 (defun spel-add-word (word)
   "Add a new word (with a count of 1) to our word hash table, or
 increment its existing count if it's been seen already."
