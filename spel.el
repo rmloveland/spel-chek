@@ -121,16 +121,17 @@ that can be made from that word."
           words)
     known))
 
-(defun spel-correct (word &keyword remove-short-words)
+(defun spel-correct (word &optional &keyword keep-short-candidates)
   (let ((candidates
          (remove-duplicates
           (or (spel-known word)
               (spel-known (spel-edit-distance-1 word))
               word)
           :test #'string-equal)))
-    (if remove-short-words
-        (remove-if-not
-         (lambda (candidate)
-           (< (ash (length word) -1) (length candidate)))
-         candidates)
-      candidates)))
+    (if keep-short-candidates
+        candidates
+      (remove-if-not
+       (lambda (candidate)
+         (< (ash (length word) -1) (length candidate)))
+       candidates))))
+
