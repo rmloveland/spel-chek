@@ -122,5 +122,9 @@ that can be made from that word."
     known))
 
 (defun spel-correct (word)
-  (let ((candidates (or (spel-known word) (spel-known (spel-edit-distance-1 word)))))
+  (let ((candidates (remove-duplicates
+                     (or (spel-known word)
+                         (spel-known (spel-edit-distance-1 word))
+                         word)
+                     :test #'string-equal)))
     candidates))
