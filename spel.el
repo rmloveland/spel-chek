@@ -55,8 +55,6 @@ increment its existing count if it's been seen already."
     (let ((words (split-string (buffer-string))))
       (mapc (lambda (word) (spel-add-word word)) words))))
 
-(spel-train "c:/Users/rml/Downloads/big.txt")
-
 (defun spel-edit-distance-1 (word)
   (let ((result (spel-flatten-list
                  (append
