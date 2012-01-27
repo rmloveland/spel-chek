@@ -53,7 +53,8 @@ increment its existing count if it's been seen already."
   (with-temp-buffer
     (insert-file-contents file)
     (let ((words (split-string (buffer-string))))
-      (mapc (lambda (word) (spel-add-word word)) words))))
+      (dolist (word words)
+        (spel-add-word word)))))
 
 (defun spel-edit-distance-1 (word)
   (let ((result (spel-flatten-list
