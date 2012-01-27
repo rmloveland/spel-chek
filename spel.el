@@ -25,7 +25,7 @@
 ;; 
 
 (defgroup spel nil
-  "A spelling checker implemented in Emacs Lisp."
+  "A spelling checker implemented in Emacs Lisp, inspired by Peter Norvig."
   :group 'spel)
 
 (defvar *spel-words (make-hash-table :test 'equal)
