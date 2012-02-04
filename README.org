@@ -4,6 +4,12 @@ This is a simple spell-checker, written in Emacs Lisp. Right now it is
 essentially a (bad?) translation of the Python code by Peter Norvig,
 discussed [[http://norvig.com/spell-correct.html][here]]. Certainly it runs much more slowly.
 
+Also, it doesn't currently export any user-accessible functionality,
+and needs to be loaded into =*ielm*=, at which point you can play with
+various functions, etc. In other words, it's an 'alpha' project that's
+still under development. There's enough here to start playing with,
+though. It even corrects a few simple spelling errors.
+
 The name =spel-chek= is a reference to the fact that this is an
 incomplete or otherwise less-featureful checker than others. In large
 part it is a pet project where I learn more about Lisp
