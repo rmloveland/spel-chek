@@ -1,0 +1,8 @@
+* Desired Features, Notes, &c.
+1. The ability to write the =*spel-words= hash table to disk would be
+   nice. Hate to retrain every time.
+
+2. An implementation of the Soundex algorithm. On a related note, I'd
+   like to modify the existing functions like =spel-edit-distance-1=
+   to refrain from adding elements to the lists they generate that are
+   obviously not necessary.
