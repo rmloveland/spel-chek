@@ -47,21 +47,37 @@ String -> String"
 	       (char-to-string c))
 	     (soundex-drop-vowel-chars (string-to-list string)) nil))
 
-(defun soundex-generate-code (s)
-  ""
+(defun soundex-generate-code (string)
+  "Generate the appropriate Soundex code for STRING."
   (let ((answer
 	 (mapconcat (lambda (n)
 		      (number-to-string n))
 		    (mapcar (lambda (c)
 			      (soundex-lookup-char c))
 			    (cdr (string-to-list
-				  (soundex-drop-vowels s)))) "")))
+				  (soundex-drop-vowels string)))) "")))
     (concat
-     (char-to-string (car (string-to-list (soundex-drop-vowels s))))
+     (char-to-string (car (string-to-list string)))
      answer)))
 
-(defun soundex-remove-duplicates (lst)
-  "Given the characters in LST, replace adjacent numbers with a single number."
+(defun soundex-list-to-string (list)
+  "Given the elements of LIST, a list of character codes, produces a string."
+  (mapconcat (lambda (c) (char-to-string c)) list nil))
+
+(defun soundex-string-truncate (str w)
+  "Truncate STRING to WIDTH characters."
+  (let ((chars (nreverse (string-to-list str))))
+    (while (not (= (length chars) 4))
+      (setq chars (cdr chars)))
+    (soundex-list-to-string (nreverse chars))))
+
+(defun soundex-string-pad (string n)
+  "Pad STRING with N zeroes."
+  (let* ((chars (nreverse (string-to-list string)))
+	 (len (length chars)))
+    (while (not (= (length chars) (+ len n)))
+      (setq chars (cons 48 chars)))
+    (soundex-list-to-string (nreverse chars))))
 
 ; take the string
 ; convert it to list
